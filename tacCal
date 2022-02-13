@@ -1,0 +1,68 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    
+    string filingStatus = "unknown";
+    double taxableIncome = 0;
+    double taxAmount = 0;
+    string invalidStatus = "Error! The entered filing status is invalid.";
+    string invalidTaxValue = "Error! The entered tax income is invalid ";
+    
+    double marginalTaxRate10 = 0.10;
+    double marginalTaxRate15 = 0.15;
+    double marginalTaxRate20 = 0.20;
+    double marginalTaxRate25 = 0.25;
+    
+    double incomeMarginZero = 0;
+    double incomeMarginLevel1 = 0;
+    double incomeMarginLevel2 = 0;
+    double incomeMarginLevel3 = 0;
+    
+    cout << "Enter the filing status: ";
+    cin >> filingStatus; 
+    
+    if (filingStatus != "SIN" && filingStatus != "MFJ" && filingStatus != "MFS" ) {
+        cout << "" << invalidStatus;
+        return 0;
+    }
+    
+    cout << "Enter the taxable income: ";
+    cin >> taxableIncome;
+    
+    if (!cin) {
+        cout << "" << invalidTaxValue << endl;
+        return 0;
+    }
+    
+    taxableIncome = taxableIncome * 1000;
+    
+    if (filingStatus == "SIN") {
+        incomeMarginLevel1 = 8 * 1000;
+        incomeMarginLevel2 = 33 * 1000;
+        incomeMarginLevel3 = 82 * 1000;
+    } else if (filingStatus == "MFJ") {
+        incomeMarginLevel1 = 16 * 1000;
+        incomeMarginLevel2 = 67 * 1000;
+        incomeMarginLevel3 = 137 * 1000;
+    } else if (filingStatus == "MFS") {
+        incomeMarginLevel1 = 8 * 1000;
+        incomeMarginLevel2 = 33 * 1000;
+        incomeMarginLevel3 = 78 * 1000;
+    }
+        
+    if (taxableIncome >= incomeMarginZero && taxableIncome <= incomeMarginLevel1) {
+        taxAmount = taxableIncome * marginalTaxRate10;
+    } else if (taxableIncome > incomeMarginLevel1 && taxableIncome <= incomeMarginLevel2) {
+        taxAmount = ((incomeMarginLevel1 * marginalTaxRate10) + ((taxableIncome - incomeMarginLevel1) * marginalTaxRate15));
+    } else if (taxableIncome > incomeMarginLevel2 && taxableIncome <= incomeMarginLevel3) {
+        taxAmount = ((incomeMarginLevel2 * marginalTaxRate15) + ((taxableIncome - incomeMarginLevel2) * marginalTaxRate20));
+    } else if (taxableIncome > incomeMarginLevel3) {
+        taxAmount = ((incomeMarginLevel3 * marginalTaxRate20) + ((taxableIncome - incomeMarginLevel3) * marginalTaxRate25));
+    }
+    
+    cout << "Tax amount is " << taxAmount/1000 << "k" << endl;
+    
+    return 0;
+}
